@@ -15,6 +15,9 @@ namespace Training.Data.Infrastructure
         // Marks an entity to be removed
         void Delete(T entity);
 
+        //Marks Id to removed -- meme
+        void Delete(int id);
+
         //Delete multi records
         void DeleteMulti(Expression<Func<T, bool>> where);
 

@@ -47,6 +47,12 @@ namespace Training.Data.Infrastructure
             dbSet.Remove(entity);
         }
 
+        //more delete with id
+        public virtual void Delete(int id)
+        {
+            dbSet.Remove(dbSet.Find(id));
+        }
+
         public virtual void DeleteMulti(Expression<Func<T, bool>> where)
         {
             IEnumerable<T> objects = dbSet.Where<T>(where).AsEnumerable();
