@@ -1,15 +1,17 @@
-﻿using System.Data.Entity;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.Entity;
 using Training.Model.Models;
 
 namespace Training.Data
 {
-    public class TrainingShopDbContext : DbContext
+    public class TrainingShopDbContext : IdentityDbContext<ApplicationUser>
     {
         public TrainingShopDbContext() : base("TrainingShopConnection")
         {
             this.Configuration.LazyLoadingEnabled = false;
         }
 
+        public DbSet<Error> Errors { set; get; }
         public DbSet<Footer> Footers { set; get; }
         public DbSet<Menu> Menus { set; get; }
         public DbSet<MenuGroup> MenuGroups { set; get; }
@@ -31,10 +33,15 @@ namespace Training.Data
 
         public DbSet<VisitorStatistic> VisitorStatistics { set; get; }
 
+        public static TrainingShopDbContext Create()
+        {
+            return new TrainingShopDbContext();
+        }
 
         protected override void OnModelCreating(DbModelBuilder builder)
         {
-
+            builder.Entity<IdentityUserRole>().HasKey( i=> new { i.UserId,i.RoleId  });
+            builder.Entity<IdentityUserLogin>().HasKey(i => i.UserId);
         }
     }
 }
