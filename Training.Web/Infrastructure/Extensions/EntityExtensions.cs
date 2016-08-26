@@ -46,5 +46,25 @@ namespace Training.Web.Infrastructure.Extensions
             post.MetaKeyword = postVm.MetaKeyword;
             post.Status = postVm.Status;
         }
+
+        public static void UpdateProductCategory(this ProductCategory productCategory, ProductCategoryViewModel productCategoryVm)
+        {
+            productCategory.ID = productCategoryVm.ID;
+            productCategory.Name = productCategoryVm.Name;
+            productCategory.Alias = productCategoryVm.Alias;
+            productCategory.Description = productCategoryVm.Description;
+            productCategory.DisplayOrder = productCategoryVm.DisplayOrder;
+            productCategory.Image = productCategoryVm.Image;
+            productCategory.ParentID = productCategoryVm.ParentID;
+            productCategory.HomeFlag = productCategoryVm.HomeFlag;
+            
+            productCategory.CreatedBy = productCategoryVm.CreatedBy;
+            productCategory.CreatedDate = productCategoryVm.CreatedDate;
+            productCategory.UpdatedBy = productCategoryVm.UpdatedBy;
+            productCategory.UpdatedDate = productCategoryVm.UpdatedDate;
+            productCategory.MetaDescription = productCategoryVm.MetaDescription;
+            productCategory.MetaKeyword = productCategoryVm.MetaKeyword;
+            productCategory.Status = productCategoryVm.Status;
+        }
     }
 }
