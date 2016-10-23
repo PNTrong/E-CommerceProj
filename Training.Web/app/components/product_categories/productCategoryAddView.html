@@ -23,7 +23,9 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Tên danh mục</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" ng-model="productCategory.Name" name="name" >
+                        <input type="text" class="form-control" required ng-maxlength="256" ng-change="GetSeoTitle()" ng-model="productCategory.Name" name="name" >
+                        <span ng-show="frmAddProductCategory.name.$invalid">Tên danh mục không được để trống!</span>
+                        <span ng-show="frmAddProductCategory.name.$error.maxlength">Tên danh mục không quá 256 kí tự!</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -51,6 +53,7 @@
                     <label for="inputEmail3" class="col-sm-2 control-label">Thứ tự</label>
                     <div class="col-sm-10">
                         <input type="number" class="form-control" name="displayOrder" ng-model="productCategory.DisplayOrder">
+                        <span ng-show="frmAddProductCategory.displayOrder.$invalid" class="has-error">Phải nhập thứ tự</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -89,7 +92,7 @@
             <!-- /.box-body -->
             <div class="box-footer">
                 <button class="btn btn-danger" ui-sref="product_categories">Cancel</button>
-                <button type="submit" class="btn btn-info pull-right">Save</button>
+                <button type="submit" class="btn btn-info pull-right" ng-disabled="frmAddProductCategory.$invalid">Save</button>
             </div>
             <!-- /.box-footer -->
         </form>

@@ -66,5 +66,28 @@ namespace Training.Web.Infrastructure.Extensions
             productCategory.MetaKeyword = productCategoryVm.MetaKeyword;
             productCategory.Status = productCategoryVm.Status;
         }
+
+        public static void UpdateProduct(this Product product, ProductViewModel productVm)
+        {
+            product.ID = productVm.ID;
+            product.Name = productVm.Name;
+            product.Alias = productVm.Alias;
+            product.Description = productVm.Description;
+            product.Content = productVm.Content;
+            product.Image = productVm.Image;
+            product.CategoryID = productVm.CategoryID;
+            product.HomeFlag = productVm.HomeFlag;
+            product.PromotionPrice = productVm.PromotionPrice;
+            product.Warranty = productVm.Warranty;
+            product.ViewCount = productVm.ViewCount;
+            product.CreatedBy = productVm.CreatedBy;
+            product.CreatedDate = productVm.CreatedDate;
+            product.UpdatedBy = productVm.UpdatedBy;
+            product.UpdatedDate = productVm.UpdatedDate;
+            product.MetaDescription = productVm.MetaDescription;
+            product.MetaKeyword = productVm.MetaKeyword;
+            product.Status = productVm.Status;
+            product.Tags = productVm.Tags;
+        }
     }
 }

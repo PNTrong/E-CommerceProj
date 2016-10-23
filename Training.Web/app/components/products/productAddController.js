@@ -2,7 +2,54 @@
 (function (app) {
     app.controller('productAddController', productAddController);
 
-    function productAddController() {
+    productAddController.$inject = ['apiService', '$scope', 'notificationService', '$state','commonService']
 
+    function productAddController(apiService, $scope, notificationService, $state, commonService) {
+
+        $scope.product = {
+            CreateDate: new Date(),
+            Status: true
+        }
+
+        $scope.ckeditorOptions = {
+            language: 'vi',
+            height:'200px'
+        }
+
+        $scope.ChooseImage = function () {
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (fileurl) {
+                $scope.product.Image = fileurl;
+            }
+
+            finder.popup();
+        }
+
+        $scope.GetSeoTitle = GetSeoTitle;
+        function GetSeoTitle() {
+            $scope.product.Alias = commonService.getSeoTitle($scope.product.Name);
+        }
+
+        $scope.AddProduct = AddProduct;
+
+        function AddProduct() {
+            apiService.post('api/product/create', $scope.product, function (result) {
+                notificationService.Success(result.data.Name + ' đã được thêm mới!');
+                $state.go('products');
+            }, function (err) {
+                notificationService.Error('Thêm mới không thành công!');
+            });
+        }
+
+        $scope.productCategories = [];
+
+        function loadParentCategory() {
+            apiService.get('api/productcategory/getallparents', null, function (result) {
+                $scope.productCategories = result.data;
+            }, function () {
+                console.log('Can not get parent list');
+            });
+        }
+        loadParentCategory();
     }
 })(angular.module('trainingshop.products'));

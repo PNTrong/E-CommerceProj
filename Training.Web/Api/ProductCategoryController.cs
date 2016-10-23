@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Script.Serialization;
 using Training.Model.Models;
 using Training.Service;
 using Training.Web.Infrastructure.Core;
@@ -55,6 +56,48 @@ namespace Training.Web.Api
              });
         }
 
+        [Route("getbyid/{id:int}")]
+        [HttpGet]
+        public HttpResponseMessage GetById(HttpRequestMessage req, int id)
+        {
+            return CreateHttpResponse(req, () =>
+            {
+                HttpResponseMessage res = null;
+                var model = _productCategoryService.GetById(id);
+                var resData = Mapper.Map<ProductCategory, ProductCategoryViewModel>(model);
+                res = req.CreateResponse(HttpStatusCode.OK, resData);
+                return res;
+            });
+        }
+
+        [Route("update")]
+        [HttpPut]
+        [AllowAnonymous]
+        public HttpResponseMessage Update(HttpRequestMessage req, ProductCategoryViewModel productCategoryVm)
+        {
+            return CreateHttpResponse(req, () =>
+            {
+                HttpResponseMessage res = null;
+                if (ModelState.IsValid)
+                {
+                    var dbProductCategory = _productCategoryService.GetById(productCategoryVm.ID);
+                    dbProductCategory.UpdateProductCategory(productCategoryVm);
+                    dbProductCategory.UpdatedDate = DateTime.Now;
+
+                    _productCategoryService.Update(dbProductCategory);
+                    _productCategoryService.SaveChanges();
+
+                    var resData = Mapper.Map<ProductCategory, ProductCategoryViewModel>(dbProductCategory);
+                    res = req.CreateResponse(HttpStatusCode.OK, resData);
+                }
+                else
+                {
+                    req.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+                return res;
+            });
+        }
+
         [Route("getallparents")]
         [HttpGet]
         public HttpResponseMessage GetAll(HttpRequestMessage req)
@@ -81,6 +124,7 @@ namespace Training.Web.Api
                 {
                     var productCategory = new ProductCategory();
                     productCategory.UpdateProductCategory(productCategoryVm);
+                    productCategory.CreatedDate = DateTime.Now;
 
                     _productCategoryService.Add(productCategory);
                     _productCategoryService.SaveChanges();
@@ -93,6 +137,41 @@ namespace Training.Web.Api
                     req.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
                 return respone;
+            });
+        }
+
+        [Route("delete")]
+        [HttpDelete]
+        [AllowAnonymous]
+        public HttpResponseMessage Delete(HttpRequestMessage req, int id)
+        {
+            return CreateHttpResponse(req, () =>
+            {
+                HttpResponseMessage res = null;
+                var productCategories = _productCategoryService.Delete(id);
+                _productCategoryService.SaveChanges();
+                res = req.CreateResponse(HttpStatusCode.OK, productCategories);
+                return res;
+            });
+        }
+
+        [Route("deletemulti")]
+        [HttpDelete]
+        [AllowAnonymous]
+        public HttpResponseMessage DeleteMulti(HttpRequestMessage req, string checkedProductCategories)
+        {
+            return CreateHttpResponse(req, () =>
+            {
+                HttpResponseMessage response = null;
+                var productCategories = new JavaScriptSerializer().Deserialize<List<int>>(checkedProductCategories);
+                foreach (var item in productCategories)
+                {
+                    _productCategoryService.Delete(item);
+                }
+
+                _productCategoryService.SaveChanges();
+                response = req.CreateResponse(HttpStatusCode.OK, productCategories.Count);
+                return response;
             });
         }
     }

@@ -8,7 +8,33 @@
     function apiService($http) {
         return {
             get: get,
-            post: post
+            post: post,
+            put: put,
+            del:del
+        }
+
+        function del(url, data, success, fail) {
+            $http.delete(url, data).then(function (result) { success(result) }, function (err) {
+                console.log(err.status);
+                if (err.status === 401) {
+                    notificationService.Error('Authenticate is required.');
+                }
+                else if (fail != null) {
+                    fail(err);
+                }
+            });
+        }
+
+        function put(url, data, success, fail) {
+            $http.put(url, data).then(function (result) { success(result); }, function (err) {
+                console.log(err.status);
+                if (err.status === 401) {
+                    notificationService.Error('Authenticate is required.');
+                }
+                else if (fail != null) {
+                    fail(err);
+                }
+            });
         }
 
         function post(url, data, success, fail) {
