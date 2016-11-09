@@ -27,6 +27,7 @@ namespace Training.Web.Api
 
         [Route("getall")]
         [HttpGet]
+        [AllowAnonymous]
         public HttpResponseMessage Get(HttpRequestMessage req, string keyword, int page, int pageSize = 20)
         {
             return CreateHttpResponse(req, () =>

@@ -25,6 +25,8 @@ namespace Training.Web.Api
         }
 
         [Route("getall")]
+        [HttpGet]
+        [AllowAnonymous]
         public HttpResponseMessage GetAll(HttpRequestMessage req, string keyword, int page, int pageSize = 20)
         {
             return CreateHttpResponse(req, () =>
@@ -46,6 +48,24 @@ namespace Training.Web.Api
                     TotalPage = (int)Math.Ceiling((decimal)totalRow / pageSize)
                 };
                 res = req.CreateResponse(HttpStatusCode.OK, paginationSet);
+                return res;
+            });
+        }
+
+
+        [Route("getbyid/{id:int}")]
+        [AllowAnonymous]
+        [HttpGet]
+        public HttpResponseMessage GetById(HttpRequestMessage req, int id)
+        {
+            return CreateHttpResponse(req, () =>
+            {
+                HttpResponseMessage res = null;
+
+                var product = _productService.GetById(id);
+                var resData = Mapper.Map<Product, ProductViewModel>(product);
+                res = req.CreateResponse(HttpStatusCode.OK, resData);
+
                 return res;
             });
         }

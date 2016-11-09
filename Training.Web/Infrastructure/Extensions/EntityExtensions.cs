@@ -88,6 +88,7 @@ namespace Training.Web.Infrastructure.Extensions
             product.MetaKeyword = productVm.MetaKeyword;
             product.Status = productVm.Status;
             product.Tags = productVm.Tags;
+            product.MoreImages = productVm.MoreImages;
         }
     }
 }

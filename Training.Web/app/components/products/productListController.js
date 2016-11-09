@@ -80,7 +80,6 @@
             
         }
 
-
         function getProducts(page) {
             page = page || 0;
             var config = {

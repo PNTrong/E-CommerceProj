@@ -1,9 +1,9 @@
 ﻿/// <reference path="/Assets/admin/libs/angular/angular.js" />
-(function (app) {UpdateProduct
+(function (app) {
     app.controller('productEditController', productEditController);
 
-    productEditController.$inject = ['apiService','$scope']
-    function productEditController() {
+    productEditController.$inject = ['apiService', '$scope', 'notificationService', '$state', '$stateParams', 'commonService'];
+    function productEditController(apiService, $scope, notificationService, $state, $stateParams, commonService) {
         $scope.product = {
             CreateDate: new Date(),
             Status: true
@@ -27,6 +27,21 @@
                 });
         }
 
+        $scope.ckeditorOptions = {
+            language: 'vi',
+            height: '200px'
+        }
+
+        $scope.ChooseImage = ChooseImage;
+        function ChooseImage() {
+            var finder = new CKFinder();
+            finder.selectActionFunction = function(fileurl) {
+                $scope.product.Image = fileurl;
+            }
+
+            finder.popup();
+        }
+
         function loadProductDetail() {
             apiService.get('api/product/getbyid/' + $stateParams.id, null, function (result) { $scope.product = result.data; },
                 function (err) {
@@ -36,7 +51,7 @@
         }
 
         function loadParentCategory() {
-            apiService.get('api/product/getallparents', null, function (result) { $scope.parentCategories = result.data; }, function () { console.log('Can not get parent list'); });
+            apiService.get('api/product/getallparents', null, function (result) { $scope.productCategories = result.data; }, function () { console.log('Can not get parent list'); });
         }
 
         loadParentCategory();

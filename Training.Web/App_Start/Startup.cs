@@ -53,10 +53,18 @@ namespace Training.Web.App_Start
                 .Where(t => t.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces().InstancePerRequest();
 
+            builder.RegisterAssemblyTypes(typeof(ProductCategoryRepository).Assembly)
+            .Where(t => t.Name.EndsWith("Repository"))
+            .AsImplementedInterfaces().InstancePerRequest();
+
             // Services
             builder.RegisterAssemblyTypes(typeof(PostCategoryService).Assembly)
                .Where(t => t.Name.EndsWith("Service"))
                .AsImplementedInterfaces().InstancePerRequest();
+
+            builder.RegisterAssemblyTypes(typeof(ProductCategoryService).Assembly)
+            .Where(t => t.Name.EndsWith("Service"))
+            .AsImplementedInterfaces().InstancePerRequest();
 
             Autofac.IContainer container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

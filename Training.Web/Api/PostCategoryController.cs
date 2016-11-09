@@ -37,17 +37,13 @@ namespace Training.Web.Api
             });
         }
 
-        [Route("add")]
+        [Route("Create")]
         public HttpResponseMessage Post(HttpRequestMessage request, PostCategoryViewModel postCategoryVm)
         {
             return CreateHttpResponse(request, () =>
             {
                 HttpResponseMessage response = null;
                 if (ModelState.IsValid)
-                {
-                    request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-                }
-                else
                 {
                     var postCategory = new PostCategory();
                     postCategory.UpdatePostCategory(postCategoryVm);
